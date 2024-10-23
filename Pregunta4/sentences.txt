@@ -1,0 +1,61 @@
+Pregunta 1
+
+- Listado de ventas del mes actual (nombre_sucursal, nombre_vendedor, marca,
+nombre_producto, fecha_venta, unidades_vendidas, precio_unitario, valor_venta)
+
+Sentencia SQL:
+SELECT S.nombre_sucursal, V.nombre_vendedor, P.marca, P.nombre_producto, VT.fecha_venta, VT.unidades_vendidas, P.precio_unitario, (VT.unidades_vendidas * P.precio_unitario) AS valor_venta
+FROM Venta VT
+JOIN Vendedor V ON VT.id_vendedor = V.id_vendedor
+JOIN Sucursal S ON VT.id_sucursal = S.id_sucursal
+JOIN Producto P ON VT.id_producto = P.id_producto
+WHERE DATE_TRUNC('month', VT.fecha_venta) = DATE_TRUNC('month', CURRENT_DATE);
+
+Pregunta 2
+
+- Ventas totales por sucursal, vendedor y marca, incluyendo los vendedores que no tuvieron
+ventas (nombre_sucursal, nombre_vendedor, marca, total_venta)
+
+Sentencia SQL:
+SELECT S.nombre_sucursal, V.nombre_vendedor, P.marca, COALESCE(SUM(VT.unidades_vendidas * P.precio_unitario), 0) AS total_venta
+FROM Sucursal S
+CROSS JOIN Vendedor V
+LEFT JOIN Venta VT ON V.id_vendedor = VT.id_vendedor
+LEFT JOIN Producto P ON VT.id_producto = P.id_producto
+GROUP BY S.nombre_sucursal, V.nombre_vendedor, P.marca
+ORDER BY S.nombre_sucursal, V.nombre_vendedor, P.marca;
+
+Pregunta 3
+
+- Productos con más de 1000 unidades vendidas en los últimos 2 meses (nombre_producto,
+marca, unidades_vendidas)
+
+Sentencia SQL:
+SELECT P.nombre_producto, P.marca, SUM(VT.unidades_vendidas) AS unidades_vendidas
+FROM Venta VT
+JOIN Producto P ON VT.id_producto = P.id_producto
+WHERE VT.fecha_venta >= CURRENT_DATE - INTERVAL '2 months'
+GROUP BY P.nombre_producto, P.marca
+HAVING SUM(VT.unidades_vendidas) > 1000;
+
+Pregunta 4
+
+- Productos sin ventas en el presente año (nombre_producto, marca)
+
+Sentencia SQL:
+SELECT P.nombre_producto, P.marca
+FROM Producto P
+LEFT JOIN Venta VT ON P.id_producto = VT.id_producto AND EXTRACT(YEAR FROM VT.fecha_venta) = EXTRACT(YEAR FROM CURRENT_DATE)
+WHERE VT.id_venta IS NULL;
+
+Pregunta 5
+
+- De los productos sin ventas en el presente año, monto total de ventas en el año anterior
+(nombre_producto, marca, total_venta)
+
+Sentencia SQL:
+SELECT P.nombre_producto, P.marca, COALESCE(SUM(VT.unidades_vendidas * P.precio_unitario), 0) AS total_venta
+FROM Producto P
+LEFT JOIN Venta VT ON P.id_producto = VT.id_producto AND EXTRACT(YEAR FROM VT.fecha_venta) = EXTRACT(YEAR FROM CURRENT_DATE) - 1
+WHERE P.id_producto NOT IN (SELECT id_producto FROM Venta WHERE EXTRACT(YEAR FROM fecha_venta) = EXTRACT(YEAR FROM CURRENT_DATE))
+GROUP BY P.nombre_producto, P.marca;

@@ -1,0 +1,28 @@
+Pregunta 1
+
+- Seleccione el título y el nombre del autor de todos los libros de la categoría "Ficción".
+
+Sentencia SQL:
+SELECT l.titulo AS libro, a.nombre AS autor
+FROM Libros l
+JOIN Autores a ON l.autor_id = a.id_autor
+JOIN Categorias c ON l.categoria_id = c.id_categoria
+WHERE c.nombre = 'Ficción';
+
+Pregunta 2
+
+- Calcule el precio promedio de todos los libros en la tabla Libros.
+
+Sentencia SQL:
+SELECT AVG(precio) AS promedio_precio
+FROM Libros;
+
+Pregunta 3
+
+- Actualice el precio de todos los libros escritos por el autor con id_autor = 5 en un 10% de
+descuento.
+
+Sentencia SQL:
+UPDATE Libros 
+SET precio = precio * 0.90 
+WHERE autor_id = 5;

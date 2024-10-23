@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pregunta3_db
+      POSTGRES_USER: pregunta3_user
+      POSTGRES_PASSWORD: pregunta3_pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS_MODULE=integrations_erp.settings
+      - PYTHONPATH=/code
+      - DATABASE_URL=postgres://pregunta3_user:pregunta3_pass@db:5432/pregunta3_db
+
+volumes:
+  pgdata:
