@@ -1,15 +1,15 @@
-Instrucciones para la ejecución de cada pregunta. Pueden ir incluidos para cada pregunta comentarios sobre el alcance o cosas que pudiesen haber faltado.
+## Instrucciones para la ejecución de cada pregunta. Pueden ir incluidos para cada pregunta comentarios sobre el alcance o cosas que pudiesen haber faltado.
 
-Pregunta 1
+### Pregunta 1
 
 Ejecutar archivo function.py el cual le haara la request a la api y hará un print de las respuestas a las preguntas planteadas.
 El script se puede ejecutar con ´python function.py´
 
-Pregunta 2
+### Pregunta 2
 
 Se adjuntan las preguntas y las sentencias SQL correspondientes en un archivo txt.
 
-Pregunta 3
+### Pregunta 3
 
 Aquí se realizarán algunos comentarios respecto al alcance de la solución.
 Primero, se debe ingresar a la carpeta con ´cd pruebaKPB/Pregunta3/integrations_erp´, luego se buildean los contenedores con ´docker-compose build´,
@@ -25,6 +25,6 @@ beat y redis), con eso se podrían ejecutar funciones indicandole al beat el tie
 Respecto a la base de datos, no había trabajado con una modelada en forma de estrella. En ese sentido, cree una tabla Fact que es la central que posee
 las relaciones a las DimUsers y DimPosts, en donde la DimUsers posee sus relaciones con DimAddress y DimCompany.
 
-Pregunta 4
+### Pregunta 4
 
 Se adjuntan las preguntas y las sentencias SQL correspondientes en un archivo txt.
